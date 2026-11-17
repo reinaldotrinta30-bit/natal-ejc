@@ -325,11 +325,122 @@
         </div>
       </div>
 
+      <!-- BOTÃO SECUNDÁRIO: DOAR COM ALIMENTOS -->
+      <button 
+        id="btn-donate-food"
+        onclick="abrirModalAlimentos()"
+        type="button"
+        class="w-full mt-3.5 bg-white hover:bg-ejc-yellowLight text-ejc-navy font-extrabold text-base sm:text-lg py-3.5 px-5 rounded-2xl border-[3px] border-ejc-navy shadow-retro btn-retro flex items-center justify-center space-x-2.5 transition-all duration-200 cursor-pointer"
+      >
+        <span class="text-xl leading-none">🥫</span>
+        <span>DOAR COM ALIMENTOS</span>
+      </button>
+
       <!-- Dica Rápida de Transparência -->
       <p class="text-[11px] text-center text-ejc-navy/65 font-medium mt-4">
-        💡 100% do valor arrecadado será convertido em quilos de alimentos para as cestas básicas de Natal.
+        💡 100% das doações serão destinadas às cestas básicas de Natal.
       </p>
     </section>
+
+    <!-- MODAL: COMBINAR DOAÇÃO DE ALIMENTOS -->
+    <div 
+      id="modal-alimentos" 
+      class="fixed inset-0 z-40 hidden bg-ejc-navy/60 backdrop-blur-xs flex items-center justify-center p-4 transition-opacity duration-200"
+      onclick="fecharModalSeClicarFora(event)"
+    >
+      <div class="w-full max-w-md bg-white rounded-3xl border-[3px] border-ejc-navy shadow-retro p-5 sm:p-6 relative text-left select-text">
+        <!-- Cabeçalho do Modal -->
+        <div class="flex items-start justify-between border-b-2 border-dashed border-ejc-navy/15 pb-3 mb-4">
+          <div class="flex items-center space-x-2.5">
+            <div class="w-10 h-10 rounded-2xl bg-ejc-yellow border-2 border-ejc-navy flex items-center justify-center text-xl shrink-0">
+              🥫
+            </div>
+            <div>
+              <h2 class="font-display text-lg sm:text-xl font-extrabold text-ejc-navy leading-tight">
+                Doar com Alimentos
+              </h2>
+              <p class="text-xs font-medium text-ejc-navy/70">
+                Preencha para combinarmos a coleta pelo WhatsApp
+              </p>
+            </div>
+          </div>
+          <button 
+            type="button" 
+            onclick="fecharModalAlimentos()" 
+            class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-ejc-navy font-extrabold flex items-center justify-center border border-ejc-navy/20 transition-colors cursor-pointer"
+            aria-label="Fechar"
+          >
+            ✕
+          </button>
+        </div>
+
+        <!-- Formulário -->
+        <form onsubmit="enviarDoacaoAlimentosWhatsApp(event)" class="space-y-3.5" novalidate>
+          <!-- Campo 1: Nome (Obrigatório) -->
+          <div>
+            <label for="input-nome-doador" class="block text-xs font-extrabold uppercase tracking-wider text-ejc-navy mb-1">
+              Seu Nome <span class="text-red-500">*</span>
+            </label>
+            <input 
+              id="input-nome-doador" 
+              type="text" 
+              required
+              placeholder="Digite seu nome..."
+              oninput="limparErroNome()"
+              class="w-full bg-ejc-yellowLight/60 focus:bg-white text-ejc-navy font-semibold text-sm rounded-xl border-2 border-ejc-navy px-3.5 py-3 outline-none focus:ring-2 focus:ring-ejc-yellow transition-all"
+            />
+            <p id="erro-nome-doador" class="hidden text-xs font-bold text-red-600 mt-1">
+              ⚠️ Por favor, informe seu nome para continuarmos.
+            </p>
+          </div>
+
+          <!-- Campo 2: Endereço (Opcional) -->
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <label for="input-endereco-doador" class="block text-xs font-extrabold uppercase tracking-wider text-ejc-navy">
+                Endereço para buscar
+              </label>
+              <span class="text-[10px] font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">Opcional</span>
+            </div>
+            <input 
+              id="input-endereco-doador" 
+              type="text" 
+              placeholder="Ex: Rua das Flores, nº 123, Centro"
+              class="w-full bg-slate-50 focus:bg-white text-ejc-navy font-medium text-sm rounded-xl border-2 border-ejc-navy/40 focus:border-ejc-navy px-3.5 py-2.5 outline-none transition-all"
+            />
+          </div>
+
+          <!-- Campo 3: Data e Horário (Opcional) -->
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <label for="input-data-doador" class="block text-xs font-extrabold uppercase tracking-wider text-ejc-navy">
+                Possível data e horário
+              </label>
+              <span class="text-[10px] font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">Opcional</span>
+            </div>
+            <input 
+              id="input-data-doador" 
+              type="text" 
+              placeholder="Ex: 20/11 a partir das 14h"
+              class="w-full bg-slate-50 focus:bg-white text-ejc-navy font-medium text-sm rounded-xl border-2 border-ejc-navy/40 focus:border-ejc-navy px-3.5 py-2.5 outline-none transition-all"
+            />
+          </div>
+
+          <!-- Botão Central de Envio para o WhatsApp -->
+          <div class="pt-2">
+            <button 
+              type="submit"
+              class="w-full bg-ejc-yellow hover:bg-ejc-yellowVibrant text-ejc-navy font-extrabold text-sm sm:text-base py-3.5 px-5 rounded-2xl border-[3px] border-ejc-navy shadow-retro btn-retro flex items-center justify-center space-x-2 transition-all cursor-pointer"
+            >
+              <svg class="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.126.556 4.124 1.535 5.86l-1.535 5.64 5.785-1.516c1.693.903 3.626 1.416 5.684 1.416 6.627 0 12-5.373 12-12s-5.373-12-11.469-12z"/>
+              </svg>
+              <span>Combinar Entrega da Doação</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
 
     <!-- Rodapé / Botão de Compartilhar a Campanha -->
     <footer class="w-full mt-5 text-center space-y-3">
@@ -548,6 +659,84 @@
       }
 
       animar();
+    }
+
+    // Número do WhatsApp para combinar a coleta de alimentos (com DDI 55)
+    const WHATSAPP_COLETA = "5598988916985";
+
+    function abrirModalAlimentos() {
+      const modal = document.getElementById("modal-alimentos");
+      if (!modal) return;
+      modal.classList.remove("hidden");
+      setTimeout(() => {
+        const inputNome = document.getElementById("input-nome-doador");
+        if (inputNome) inputNome.focus();
+      }, 100);
+    }
+
+    function fecharModalAlimentos() {
+      const modal = document.getElementById("modal-alimentos");
+      if (!modal) return;
+      modal.classList.add("hidden");
+      limparErroNome();
+    }
+
+    function fecharModalSeClicarFora(event) {
+      const modal = document.getElementById("modal-alimentos");
+      if (event.target === modal) {
+        fecharModalAlimentos();
+      }
+    }
+
+    function limparErroNome() {
+      const inputNome = document.getElementById("input-nome-doador");
+      const erroNome = document.getElementById("erro-nome-doador");
+      if (inputNome) inputNome.classList.remove("border-red-500");
+      if (erroNome) erroNome.classList.add("hidden");
+    }
+
+    function enviarDoacaoAlimentosWhatsApp(event) {
+      event.preventDefault();
+
+      const inputNome = document.getElementById("input-nome-doador");
+      const inputEndereco = document.getElementById("input-endereco-doador");
+      const inputData = document.getElementById("input-data-doador");
+      const erroNome = document.getElementById("erro-nome-doador");
+
+      const nome = inputNome ? inputNome.value.trim() : "";
+      const endereco = inputEndereco ? inputEndereco.value.trim() : "";
+      const dataHora = inputData ? inputData.value.trim() : "";
+
+      // Validação do campo obrigatório (Nome)
+      if (!nome) {
+        if (inputNome) {
+          inputNome.classList.add("border-red-500");
+          inputNome.focus();
+        }
+        if (erroNome) erroNome.classList.remove("hidden");
+        if (navigator.vibrate) navigator.vibrate(80);
+        return;
+      }
+
+      // Montagem inteligente da mensagem conforme os campos preenchidos
+      let mensagem = `Olá, me chamo ${nome}, vim pelo instagram e gostaria de combinar a doação em alimentos`;
+
+      // Evita repetição caso o usuário já tenha digitado "no dia" ou "dia"
+      const dataLimpa = dataHora.replace(/^(no\s+dia\s+|dia\s+)/i, "").trim();
+
+      if (endereco && dataLimpa) {
+        mensagem += ` no endereço ${endereco}, no dia ${dataLimpa}.`;
+      } else if (endereco) {
+        mensagem += ` no endereço ${endereco}.`;
+      } else if (dataLimpa) {
+        mensagem += `, no dia ${dataLimpa}.`;
+      } else {
+        mensagem += `.`;
+      }
+
+      const urlWhatsApp = `https://wa.me/${WHATSAPP_COLETA}?text=${encodeURIComponent(mensagem)}`;
+      fecharModalAlimentos();
+      window.open(urlWhatsApp, "_blank");
     }
 
     // Inicializa contador ao carregar a página
